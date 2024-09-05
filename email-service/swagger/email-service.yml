@@ -1,0 +1,109 @@
+openapi: 3.0.0
+info:
+  title: Email Service API
+  description: API for Email Management Service
+  version: 1.0.0
+servers:
+  - url: http://localhost:8081
+tags:
+  - name: Email Management
+    description: Manage emails, compose, view inbox, etc.
+
+paths:
+  /compose:
+    post:
+      tags:
+        - Email Management
+      summary: Compose and send a new email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComposeEmailRequest'
+      responses:
+        '200':
+          description: Email composed and sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComposeEmailResponse'
+
+  /inbox:
+    get:
+      tags:
+        - Email Management
+      summary: Get inbox for a user
+      parameters:
+        - name: user_email
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful inbox retrieval
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInboxResponse'
+
+components:
+  schemas:
+    ComposeEmailRequest:
+      type: object
+      properties:
+        sender:
+          type: string
+        to:
+          type: array
+          items:
+            type: string
+        cc:
+          type: array
+          items:
+            type: string
+        bcc:
+          type: array
+          items:
+            type: string
+        subject:
+          type: string
+        body:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: string
+
+    ComposeEmailResponse:
+      type: object
+      properties:
+        message_id:
+          type: string
+        success:
+          type: boolean
+
+    GetInboxResponse:
+      type: object
+      properties:
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailMessage'
+
+    EmailMessage:
+      type: object
+      properties:
+        id:
+          type: string
+        sender:
+          type: string
+        subject:
+          type: string
+        body:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: string

@@ -1,0 +1,126 @@
+openapi: 3.0.0
+info:
+  title: Search & Filter Service API
+  description: API for searching and filtering emails in the email system
+  version: 1.0.0
+servers:
+  - url: http://localhost:8084
+tags:
+  - name: Email Search and Filter
+    description: Search emails and manage filters for automatic email categorization
+
+paths:
+  /search:
+    post:
+      tags:
+        - Email Search and Filter
+      summary: Search emails based on query, date range, and labels
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchEmailsRequest'
+      responses:
+        '200':
+          description: Emails found successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchEmailsResponse'
+
+  /filter:
+    post:
+      tags:
+        - Email Search and Filter
+      summary: Create a new filter for categorizing emails
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFilterRequest'
+      responses:
+        '200':
+          description: Filter created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateFilterResponse'
+
+components:
+  schemas:
+    SearchEmailsRequest:
+      type: object
+      properties:
+        user_id:
+          type: string
+        query:
+          type: string
+        labels:
+          type: array
+          items:
+            type: string
+        date_range_start:
+          type: string
+          format: date-time
+        date_range_end:
+          type: string
+          format: date-time
+
+    SearchEmailsResponse:
+      type: object
+      properties:
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Email'
+
+    Email:
+      type: object
+      properties:
+        email_id:
+          type: string
+        sender:
+          type: string
+        subject:
+          type: string
+        preview:
+          type: string
+        date_sent:
+          type: string
+          format: date-time
+
+    CreateFilterRequest:
+      type: object
+      properties:
+        user_id:
+          type: string
+        sender:
+          type: string
+        subject_contains:
+          type: string
+        move_to_folder:
+          type: string
+
+    CreateFilterResponse:
+      type: object
+      properties:
+        filter_id:
+          type: string
+
+    ApplyFiltersResponse:
+      type: object
+      properties:
+        filtered_emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilteredEmail'
+
+    FilteredEmail:
+      type: object
+      properties:
+        email_id:
+          type: string
+        folder:
+          type: string

@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+option go_package = "/proto";
+
+import "google/protobuf/empty.proto";
+
+service AuthService {
+  rpc SignUp(SignUpRequest) returns (SignUpResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc Logout(LogoutRequest) returns (google.protobuf.Empty);
+  rpc VerifyTOTP(VerifyTOTPRequest) returns (VerifyTOTPResponse);
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
+}
+
+message SignUpRequest {
+  string name = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message SignUpResponse {
+  string message = 1;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string token = 1;
+  string refresh_token = 2;
+}
+
+message LogoutRequest {
+  string token = 1;
+}
+
+message VerifyTOTPRequest {
+  string email = 1;
+  string totp_code = 2;
+}
+
+message VerifyTOTPResponse {
+  bool success = 1;
+}
+
+message RefreshTokenRequest {
+  string refresh_token = 1;
+}
+
+message RefreshTokenResponse {
+  string token = 1;
+}
+
+message Empty{
+    // No fields
+}

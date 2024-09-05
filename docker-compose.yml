@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  api-gateway:
+    image: traefik:v2.5
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  user-service:
+    build: ./user-service
+    labels:
+      - "traefik.http.routers.userservice.rule=Host(`localhost`) && PathPrefix(`/user`)"
+      - "traefik.http.services.userservice.loadbalancer.server.port=50051"
+
+  email-service:
+    build: ./email-delivery-service
+    labels:
+      - "traefik.http.routers.emailservice.rule=Host(`localhost`) && PathPrefix(`/email`)"
+      - "traefik.http.services.emailservice.loadbalancer.server.port=50057"
+
+  contact-service:
+    build: ./contact-management-service
+    labels:
+      - "traefik.http.routers.contactservice.rule=Host(`localhost`) && PathPrefix(`/contact`)"
+      - "traefik.http.services.contactservice.loadbalancer.server.port=50055"
+
+  notification-service:
+    build: ./notification-service
+    labels:
+      - "traefik.http.routers.notificationservice.rule=Host(`localhost`) && PathPrefix(`/notification`)"
+      - "traefik.http.services.notificationservice.loadbalancer.server.port=50056"
+
+  email-delivery-service:
+    build: ./email-delivery-service
+    labels:
+      - "traefik.http.routers.emailservice.rule=Host(`localhost`) && PathPrefix(`/email`)"
+      - "traefik.http.services.emailservice.loadbalancer.server.port=50057"

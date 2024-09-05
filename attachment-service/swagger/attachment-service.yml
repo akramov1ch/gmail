@@ -1,0 +1,90 @@
+openapi: 3.0.0
+info:
+  title: Attachment Service API
+  description: API for handling file attachments in the email system
+  version: 1.0.0
+servers:
+  - url: http://localhost:8083
+tags:
+  - name: Attachment Management
+    description: Manage file attachments (upload, download, delete)
+
+paths:
+  /upload:
+    post:
+      tags:
+        - Attachment Management
+      summary: Upload a new file attachment
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UploadAttachmentRequest'
+      responses:
+        '200':
+          description: File uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadAttachmentResponse'
+
+  /attachment/{attachment_id}:
+    get:
+      tags:
+        - Attachment Management
+      summary: Get a file attachment
+      parameters:
+        - name: attachment_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Attachment fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAttachmentResponse'
+
+    delete:
+      tags:
+        - Attachment Management
+      summary: Delete a file attachment
+      parameters:
+        - name: attachment_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Attachment deleted successfully
+
+components:
+  schemas:
+    UploadAttachmentRequest:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+        filename:
+          type: string
+        content_type:
+          type: string
+
+    UploadAttachmentResponse:
+      type: object
+      properties:
+        url:
+          type: string
+
+    GetAttachmentResponse:
+      type: object
+      properties:
+        filename:
+          type: string
+        url:
+          type: string

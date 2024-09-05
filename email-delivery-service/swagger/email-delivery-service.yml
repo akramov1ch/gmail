@@ -1,0 +1,59 @@
+openapi: 3.0.0
+info:
+  title: Email Delivery Service API
+  description: API for sending emails
+  version: 1.0.0
+servers:
+  - url: http://localhost:8087
+tags:
+  - name: Email
+    description: Send emails to recipients
+
+paths:
+  /emails:
+    post:
+      tags:
+        - Email
+      summary: Send an email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailRequest'
+      responses:
+        '200':
+          description: Email sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailResponse'
+
+components:
+  schemas:
+    SendEmailRequest:
+      type: object
+      properties:
+        to:
+          type: string
+        subject:
+          type: string
+        body:
+          type: string
+        cc:
+          type: array
+          items:
+            type: string
+        bcc:
+          type: array
+          items:
+            type: string
+        attachment:
+          type: string
+          format: byte
+
+    SendEmailResponse:
+      type: object
+      properties:
+        status:
+          type: string

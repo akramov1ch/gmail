@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+option go_package = "/proto";
+
+service ContactManagementService {
+  rpc AddContact(AddContactRequest) returns (AddContactResponse);
+  rpc UpdateContact(UpdateContactRequest) returns (UpdateContactResponse);
+  rpc DeleteContact(DeleteContactRequest) returns (DeleteContactResponse);
+  rpc GetContacts(GetContactsRequest) returns (GetContactsResponse);
+  rpc SearchContacts(SearchContactsRequest) returns (SearchContactsResponse);
+}
+
+message AddContactRequest {
+  string user_id = 1;
+  string name = 2;
+  string email = 3;
+  string phone_number = 4;
+}
+
+message AddContactResponse {
+  string contact_id = 1;
+}
+
+message UpdateContactRequest {
+  string contact_id = 1;
+  string name = 2;
+  string email = 3;
+  string phone_number = 4;
+}
+
+message UpdateContactResponse {
+  string status = 1;
+}
+
+message DeleteContactRequest {
+  string contact_id = 1;
+}
+
+message DeleteContactResponse {
+  string status = 1;
+}
+
+message GetContactsRequest {
+  string user_id = 1;
+}
+
+message GetContactsResponse {
+  repeated Contact contacts = 1;
+}
+
+message SearchContactsRequest {
+  string user_id = 1;
+  string query = 2;
+}
+
+message SearchContactsResponse {
+  repeated Contact contacts = 1;
+}
+
+message Contact {
+  string contact_id = 1;
+  string name = 2;
+  string email = 3;
+  string phone_number = 4;
+}

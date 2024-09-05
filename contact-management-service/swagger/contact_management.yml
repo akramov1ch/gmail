@@ -1,0 +1,190 @@
+openapi: 3.0.0
+info:
+  title: Contact Management Service API
+  description: API for managing user's contacts in the email system
+  version: 1.0.0
+servers:
+  - url: http://localhost:8085
+tags:
+  - name: Contact Management
+    description: Manage contacts of a user
+
+paths:
+  /contacts:
+    post:
+      tags:
+        - Contact Management
+      summary: Add a new contact to the user's contact list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddContactRequest'
+      responses:
+        '200':
+          description: Contact added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddContactResponse'
+
+    get:
+      tags:
+        - Contact Management
+      summary: Retrieve all contacts for a user
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: string
+          required: true
+          description: The user ID
+      responses:
+        '200':
+          description: List of contacts retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetContactsResponse'
+
+  /contacts/{contact_id}:
+    put:
+      tags:
+        - Contact Management
+      summary: Update a contact's details
+      parameters:
+        - in: path
+          name: contact_id
+          schema:
+            type: string
+          required: true
+          description: The contact ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateContactRequest'
+      responses:
+        '200':
+          description: Contact updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateContactResponse'
+
+    delete:
+      tags:
+        - Contact Management
+      summary: Delete a contact from the user's contact list
+      parameters:
+        - in: path
+          name: contact_id
+          schema:
+            type: string
+          required: true
+          description: The contact ID
+      responses:
+        '200':
+          description: Contact deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteContactResponse'
+
+  /contacts/search:
+    get:
+      tags:
+        - Contact Management
+      summary: Search for a contact by name or email
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: query
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: List of contacts matching the search criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchContactsResponse'
+
+components:
+  schemas:
+    AddContactRequest:
+      type: object
+      properties:
+        user_id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        phone_number:
+          type: string
+
+    AddContactResponse:
+      type: object
+      properties:
+        contact_id:
+          type: string
+
+    UpdateContactRequest:
+      type: object
+      properties:
+        contact_id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        phone_number:
+          type: string
+
+    UpdateContactResponse:
+      type: object
+      properties:
+        status:
+          type: string
+
+    DeleteContactResponse:
+      type: object
+      properties:
+        status:
+          type: string
+
+    GetContactsResponse:
+      type: object
+      properties:
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
+
+    SearchContactsResponse:
+      type: object
+      properties:
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
+
+    Contact:
+      type: object
+      properties:
+        contact_id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        phone_number:
+          type: string

@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+option go_package = "/proto";
+
+import "google/protobuf/timestamp.proto";
+
+service SearchFilterService {
+  rpc SearchEmails(SearchEmailsRequest) returns (SearchEmailsResponse);
+  rpc CreateFilter(CreateFilterRequest) returns (CreateFilterResponse);
+  rpc ApplyFilters(ApplyFiltersRequest) returns (ApplyFiltersResponse);
+}
+
+message SearchEmailsRequest {
+  string user_id = 1;
+  string query = 2;
+  repeated string labels = 3;
+  google.protobuf.Timestamp date_range_start = 4;
+  google.protobuf.Timestamp date_range_end = 5;
+}
+
+message SearchEmailsResponse {
+  repeated Email emails = 1;
+}
+
+message Email {
+  string email_id = 1;
+  string sender = 2;
+  string subject = 3;
+  string preview = 4;
+  google.protobuf.Timestamp date_sent = 5;
+}
+
+message CreateFilterRequest {
+  string user_id = 1;
+  string sender = 2;
+  string subject_contains = 3;
+  string move_to_folder = 4;
+}
+
+message CreateFilterResponse {
+  string filter_id = 1;
+}
+
+message ApplyFiltersRequest {
+  string user_id = 1;
+}
+
+message ApplyFiltersResponse {
+  repeated FilteredEmail filtered_emails = 1;
+}
+
+message FilteredEmail {
+  string email_id = 1;
+  string folder = 2;
+}

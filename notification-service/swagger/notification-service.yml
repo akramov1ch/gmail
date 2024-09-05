@@ -1,0 +1,46 @@
+openapi: 3.0.0
+info:
+  title: Notification Service API
+  description: API for sending notifications to users
+  version: 1.0.0
+servers:
+  - url: http://localhost:8086
+tags:
+  - name: Notification
+    description: Send notifications to users
+
+paths:
+  /notifications:
+    post:
+      tags:
+        - Notification
+      summary: Send a notification to a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendNotificationRequest'
+      responses:
+        '200':
+          description: Notification sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendNotificationResponse'
+
+components:
+  schemas:
+    SendNotificationRequest:
+      type: object
+      properties:
+        user_id:
+          type: string
+        message:
+          type: string
+
+    SendNotificationResponse:
+      type: object
+      properties:
+        status:
+          type: string

@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option go_package = "path/to/your/project/proto";
+
+import "google/protobuf/empty.proto"; // Google protobuf empty importi
+
+service AttachmentService {
+  rpc UploadAttachment(UploadAttachmentRequest) returns (UploadAttachmentResponse);
+  rpc GetAttachment(GetAttachmentRequest) returns (GetAttachmentResponse);
+  rpc DeleteAttachment(DeleteAttachmentRequest) returns (google.protobuf.Empty); // Empty import qilindi
+}
+
+message UploadAttachmentRequest {
+  bytes file = 1;
+  string filename = 2;
+  string content_type = 3;
+}
+
+message UploadAttachmentResponse {
+  string url = 1;
+}
+
+message GetAttachmentRequest {
+  string attachment_id = 1;
+}
+
+message GetAttachmentResponse {
+  string filename = 1;
+  string url = 2;
+}
+
+message DeleteAttachmentRequest {
+  string attachment_id = 1;
+}
